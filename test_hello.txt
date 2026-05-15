@@ -1,0 +1,7 @@
+docker compose down -v
+docker compose down --remove-orphans -v
+
+docker compose up -d
+docker compose exec ap-server npx tsx src/index.ts
+
+
