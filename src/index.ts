@@ -1,34 +1,22 @@
 import Fastify from 'fastify'
 import fastifyMysql from '@fastify/mysql'
-
-// TypeScriptにプラグインの型を認識させる
-declare module 'fastify' {
-  interface FastifyInstance {
-    mysql: any
-  }
-}
+import { appRoutes } from './routes.js'
 
 const fastify = Fastify({ logger: true })
 
-// MySQL への接続登録
-// ホスト名は docker-compose.yml で定義したサービス名の "db" を指定します
+// 型定義
+declare module 'fastify' {
+  interface FastifyInstance { mysql: any }
+}
+
+// DB設定 (docker-compose.yml のサービス名 db-server に合わせる)
 fastify.register(fastifyMysql, {
   promise: true,
   connectionString: 'mysql://demo_user:demo_password@db-server:3306/demo_db'
 })
 
-// ルート定義
-fastify.get('/', async (request, reply) => {
-  // DBの時間を取得してみる（疎通確認用）
-  const connection = await fastify.mysql.getConnection()
-  const [rows]: any = await connection.query('SELECT NOW() as now')
-  connection.release()
-
-  return {
-    hello: 'TypeScript & MySQL!',
-    db_time: rows[0].now
-  }
-})
+// ルーティング登録
+fastify.register(appRoutes)
 
 const start = async () => {
   try {
