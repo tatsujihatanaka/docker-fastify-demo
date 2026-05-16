@@ -3,7 +3,7 @@ import type { FastifyReply, FastifyRequest, FastifyInstance } from 'fastify'
 
 // ルートディレクトリ (/) 用の処理
 export const getHome = async (request: FastifyRequest, reply: FastifyReply) => {
-  return { message: 'Welcome to the Fastify App Home! Next test is /mysql_test' }
+  return { message: 'Welcome to the Fastify App Home! Next test is /mysql_test and html_test' }
 }
 
 // /mysql_test 用の処理
@@ -21,4 +21,24 @@ export const getMysqlTest = (fastify: FastifyInstance) => async (request: Fastif
   } finally {
     connection.release()
   }
+}
+
+export const getHtmlTest = async (request: FastifyRequest, reply: FastifyReply) => {
+  reply.type('text/html')
+
+  // 最小限のHTML（bodyタグすら省略可能ですが、ブラウザのために最低限維持）
+  return `
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<h1>Hello Fastify!</h1>
+<p>これで日本語も正しく表示されます。</p>
+<hr>
+<a href="/">ホームへ戻る</a>
+</body>
+</html>
+  `
 }

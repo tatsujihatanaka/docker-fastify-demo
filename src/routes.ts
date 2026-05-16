@@ -1,6 +1,6 @@
 // import { FastifyInstance } from 'fastify'
 import type { FastifyInstance } from 'fastify'
-import { getHome, getMysqlTest } from './controllers/testController.js'
+import { getHome, getMysqlTest, getHtmlTest } from './controllers/testController.js'
 
 export async function appRoutes(fastify: FastifyInstance) {
   // ルートディレクトリ
@@ -8,4 +8,7 @@ export async function appRoutes(fastify: FastifyInstance) {
 
   // /mysql_test ディレクトリ
   fastify.get('/mysql_test', getMysqlTest(fastify))
+
+  // /mysql_test ディレクトリ
+  fastify.get('/html_test', getHtmlTest)
 }
